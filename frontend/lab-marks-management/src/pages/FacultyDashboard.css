@@ -1,0 +1,176 @@
+/* FacultyDashboard.css */
+.faculty-dashboard {
+  font-family: 'Arial', sans-serif;
+  margin: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  position: relative; /* Make sure we can position the button relative to the parent container */
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  font-size: 2rem;
+}
+
+h3 {
+  color: #555;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Info Button positioned at the top-right corner */
+.info-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+}
+
+.info-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  background-color: #dc3545;
+  color: white;
+}
+
+.error-message, .success-message {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.course-selection {
+  margin: 20px 0;
+}
+
+.course-buttons button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #f8f9fa;
+  border: 2px solid #007bff;
+  color: #007bff;
+}
+
+.course-buttons button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.marks-table-container {
+  margin-top: 20px;
+}
+
+.marks-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.marks-table th, .marks-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.marks-table th {
+  background-color: #f1f1f1;
+}
+
+.marks-table td input {
+  width: 50px;
+  padding: 5px;
+  text-align: center;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.marks-table td input:disabled {
+  background-color: #f8f9fa;
+}
+
+.marks-table button {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  background-color: #28a745;
+  color: white;
+  border-radius: 5px;
+  border: none;
+}
+
+.marks-table button:disabled {
+  background-color: #ccc;
+}
+
+.marks-table p {
+  text-align: center;
+  color: #555;
+}

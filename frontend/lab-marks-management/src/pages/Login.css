@@ -1,0 +1,53 @@
+/* Login.css */
+
+/* General login page layout */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f7fa;
+}
+
+.login-box {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+  margin: 20px;
+}
+
+/* Heading styling */
+.login-heading {
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.footer-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.footer-container p {
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.footer-container button {
+  background-color: #e2e8f0;
+  color: #333;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.footer-container button:hover {
+  background-color: #cbd5e0;
+}
+
