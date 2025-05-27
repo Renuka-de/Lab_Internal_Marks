@@ -1,6 +1,6 @@
 #  Lab Internal Marks Management System
 
-A full-stack web application to manage internal lab marks for students, built with the MERN stack (MySQL, Express.js, React.js, Node.js). This system automates student enrollment, mark entry, and performance report generation, aiming to reduce manual effort and improve transparency.
+A full-stack web application to manage internal lab marks for students, built with a MySQL-based full-stack using Express.js, React.js, and Node.js. This system automates student enrollment, mark entry, and performance report generation, aiming to reduce manual effort and improve transparency.
 
 ##  Features
 
@@ -26,14 +26,14 @@ A full-stack web application to manage internal lab marks for students, built wi
 - **Views**: Simplify performance queries with joined tables.
 - **Cursors**: Batch update reports for all enrolled students.
 
-## ⚙️ Setup Instructions
+##  Setup Instructions
 
 1. **Clone this repo**
 
 ```
 git clone https://github.com/your-username/lab-marks-management.git
 cd lab-marks-management
-````
+```
 
 2. **Backend Setup**
 
