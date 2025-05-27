@@ -13,7 +13,22 @@ const getStudentDetails = async (req, res) => {
 const getStudentReport = async (req, res) => {
   const { id } = req.query;
   const [rows] = await pool.execute(
-    `SELECT * FROM view_student_report_summary WHERE student_id = ?`,
+    `SELECT DISTINCT
+    c.course_code,
+    c.course_name,
+    f.faculty_name,
+    v.total_marks,
+    v.generated_date
+    FROM enrollment e
+    JOIN course c ON e.course_code = c.course_code
+    JOIN teaches t ON c.course_code = t.course_code AND t.faculty_id = e.faculty_id
+    JOIN faculty f ON f.faculty_id = t.faculty_id
+    LEFT JOIN view_student_performance_detail v 
+    ON v.student_id = e.student_id AND v.course_code = e.course_code
+    WHERE e.student_id = ?
+    ORDER BY c.course_code;
+
+`,
     [id]
   );
   res.json(rows);
@@ -43,8 +58,8 @@ const getAvailableCourses = async (req, res) => {
      JOIN faculty f ON t.faculty_id = f.faculty_id
      WHERE t.course_code NOT IN (
        SELECT course_code FROM enrollment WHERE student_id = ?
-     )`,
-    [studentId]
+     ) AND c.department_id IN(SELECT department_id FROM student WHERE student_id=?)`,
+    [studentId,studentId]
   );
   res.json(courses);
 };
@@ -61,4 +76,29 @@ const enrollInCourse = async (req, res) => {
 };
 
 
-module.exports = { enrollInCourse,getAvailableCourses,getStudentDetails,getStudentReport,getStudentPerformanceDetail  };
+const unenrollCourse = async (req, res) => {
+  const { student_id, course_code } = req.body;
+
+  if (!student_id || !course_code) {
+    return res.status(400).json({ message: "Student ID and Course Code are required" });
+  }
+
+  try {
+    const [result] = await pool.execute(
+      `DELETE FROM enrollment WHERE student_id = ? AND course_code = ?`,
+      [student_id, course_code]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Enrollment not found" });
+    }
+
+    res.status(200).json({ message: "Unenrolled successfully" });
+  } catch (error) {
+    console.error('Error during unenrollment:', error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+module.exports = { unenrollCourse, enrollInCourse,getAvailableCourses,getStudentDetails,getStudentReport,getStudentPerformanceDetail  };

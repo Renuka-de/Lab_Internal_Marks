@@ -1,137 +1,246 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './RegisterForm.css'; // Import new styles
+import '../styles/RegisterForm.css';
 
 const RegisterForm = () => {
-  const [role, setRole] = useState('');
-  const [extraInfo, setExtraInfo] = useState({});
+  const [role, setRole] = useState('student');
+  const [departmentNames, setDepartmentNames] = useState([]);
+  const [formData, setFormData] = useState({
+    faculty_name: '',
+    student_name: '',
+    dob: '',
+    gender: '',
+    house_name: '',
+    place: '',
+    city: '',
+    phone_no: '',
+    department_name: ''
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  const handleRoleChange = (e) => {
-    setRole(e.target.value);
-    setExtraInfo({});
-  };
+  useEffect(() => {
+    async function fetchDepartments() {
+      try {
+        const response = await fetch('http://localhost:5000/api/auth/departments');
+        const data = await response.json();
+        setDepartmentNames(data);
+      } catch (error) {
+        setError('Failed to fetch departments');
+      }
+    }
+    fetchDepartments();
+  }, []);
 
-  const handleExtraInfoChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setExtraInfo((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
+    
+    if (!role) {
+      setError('Please select a role');
+      return;
+    }
+
+    const requestData = { 
+      role, 
+      ...formData,
+      ...(role === 'faculty' && { f_phone_no: formData.phone_no }),
+      ...(role === 'student' && { s_phone_no: formData.phone_no })
+    };
+    delete requestData.phone_no;
+
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { role, ...extraInfo });
-      alert('Registration successful!');
-      navigate('/login'); // ✅ Navigate after success
-    } catch (error) {
-      console.error(error);
-      alert('Registration failed.');
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setSuccess(result.message || 'Registration successful!');
+        setTimeout(() => navigate('/login'), 2000);
+      } else {
+        setError(result.error || 'Registration failed');
+      }
+    } catch (err) {
+      setError('Error during registration');
     }
   };
 
-  const renderInput = (type, name, placeholder) => (
-    <input
-      className="w-full border px-3 py-2 rounded mb-2"
-      type={type}
-      name={name}
-      placeholder={placeholder}
-      value={extraInfo[name] || ''}
-      onChange={handleExtraInfoChange}
-      required
-    />
-  );
-
   return (
-    <div className="register-form-container">
-      <div className="register-box1">
-        <h2 className="register-heading">Register as {role || '...'}</h2>
+    <div className="lms-auth-container">
+      <button className="go-back-button" onClick={() => navigate(-1)}>
+        ← Go Back
+      </button>
+      
+      <div className="lms-auth-card">
+        <div className="lms-auth-header">
+          <h1 className="lms-auth-title">Create Account</h1>
+          <p className="lms-auth-subtitle">Join our learning community</p>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block mb-1">Role:</label>
-            <select
-              className="w-full border px-3 py-2 rounded"
-              name="role"
-              value={role}
-              onChange={handleRoleChange}
-              required
+        <form className="lms-auth-form" onSubmit={handleSubmit}>
+          {error && <div className="lms-form-error">{error}</div>}
+          {success && <div className="lms-form-success">{success}</div>}
+
+          <div className="role-selection">
+            <div 
+              className={`role-option ${role === 'student' ? 'active' : ''}`}
+              onClick={() => setRole('student')}
             >
-              <option value="">Select Role</option>
-              <option value="admin">Admin</option>
-              <option value="faculty">Faculty</option>
-              <option value="student">Student</option>
-            </select>
+              Student
+            </div>
+            <div 
+              className={`role-option ${role === 'faculty' ? 'active' : ''}`}
+              onClick={() => setRole('faculty')}
+            >
+              Faculty
+            </div>
           </div>
 
-          {role === 'admin' && (
-            <>
-              {renderInput('number', 'admin_id', 'Admin ID')}
-              {renderInput('text', 'username', 'Username')}
-              {renderInput('email', 'email', 'Email')}
-              {renderInput('password', 'password', 'Password')}
-            </>
-          )}
-
           {role === 'faculty' && (
-            <>
-              {renderInput('number', 'faculty_id', 'Faculty ID')}
-              {renderInput('text', 'faculty_name', 'Faculty Name')}
-              {renderInput('date', 'dob', 'Date of Birth')}
-              <select
-                name="gender"
-                value={extraInfo.gender || ''}
-                onChange={handleExtraInfoChange}
-                className="w-full border px-3 py-2 rounded mb-2"
+            <div className="lms-form-group">
+              <label className="lms-form-label">Faculty Name</label>
+              <input
+                type="text"
+                name="faculty_name"
+                value={formData.faculty_name}
+                onChange={handleChange}
+                className="lms-form-control"
                 required
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-              {renderInput('text', 'house_name', 'House Name')}
-              {renderInput('text', 'place', 'Place')}
-              {renderInput('text', 'city', 'City')}
-              {renderInput('text', 'f_phone_no', 'Phone Number')}
-              {renderInput('number', 'admin_id', 'Admin ID')}
-              {renderInput('number', 'department_id', 'Department ID')}
-            </>
+              />
+            </div>
           )}
 
           {role === 'student' && (
-            <>
-              {renderInput('number', 'student_id', 'Student ID')}
-              {renderInput('text', 'student_name', 'Student Name')}
-              {renderInput('date', 'dob', 'Date of Birth')}
-              <select
-                name="gender"
-                value={extraInfo.gender || ''}
-                onChange={handleExtraInfoChange}
-                className="w-full border px-3 py-2 rounded mb-2"
+            <div className="lms-form-group">
+              <label className="lms-form-label">Student Name</label>
+              <input
+                type="text"
+                name="student_name"
+                value={formData.student_name}
+                onChange={handleChange}
+                className="lms-form-control"
                 required
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-              {renderInput('text', 'house_name', 'House Name')}
-              {renderInput('text', 'place', 'Place')}
-              {renderInput('text', 'city', 'City')}
-              {renderInput('text', 's_phone_no', 'Phone Number')}
-              {renderInput('number', 'admin_id', 'Admin ID')}
-              {renderInput('number', 'department_id', 'Department ID')}
-            </>
+              />
+            </div>
           )}
 
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
-          >
-            Register
-          </button>
+          <div className="lms-form-group">
+            <label className="lms-form-label">Date of Birth</label>
+            <input
+              type="date"
+              name="dob"
+              value={formData.dob}
+              onChange={handleChange}
+              className="lms-form-control"
+              required
+            />
+          </div>
+
+          <div className="lms-form-group">
+            <label className="lms-form-label">Gender</label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="lms-form-control lms-form-select"
+              required
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div className="lms-form-group">
+            <label className="lms-form-label">House Name</label>
+            <input
+              type="text"
+              name="house_name"
+              value={formData.house_name}
+              onChange={handleChange}
+              className="lms-form-control"
+              required
+            />
+          </div>
+
+          <div className="lms-form-group">
+            <label className="lms-form-label">Place</label>
+            <input
+              type="text"
+              name="place"
+              value={formData.place}
+              onChange={handleChange}
+              className="lms-form-control"
+              required
+            />
+          </div>
+
+          <div className="lms-form-group">
+            <label className="lms-form-label">City</label>
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              className="lms-form-control"
+              required
+            />
+          </div>
+
+          <div className="lms-form-group">
+            <label className="lms-form-label">Phone Number</label>
+            <input
+              type="tel"
+              name="phone_no"
+              value={formData.phone_no}
+              onChange={handleChange}
+              className="lms-form-control"
+              required
+            />
+          </div>
+
+          <div className="lms-form-group">
+            <label className="lms-form-label">Department</label>
+            <select
+              name="department_name"
+              value={formData.department_name}
+              onChange={handleChange}
+              className="lms-form-control lms-form-select"
+              required
+            >
+              <option value="">Select Department</option>
+              {departmentNames.map(dept => (
+                <option key={dept.department_id} value={dept.department_name}>
+                  {dept.department_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="lms-form-actions">
+            <button type="submit" className="lms-primary-btn">
+              Register
+            </button>
+          </div>
         </form>
+
+        <div className="lms-auth-footer">
+          Already have an account?{' '}
+          <a className="lms-auth-link" onClick={() => navigate('/login')}>
+            Sign in
+          </a>
+        </div>
       </div>
     </div>
   );

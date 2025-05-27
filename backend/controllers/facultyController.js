@@ -45,12 +45,10 @@ const getCoursesByFaculty = async (req, res) => {
   }
 };
 
-// Get students and their marks in a specific course
-// Get students and their marks in a specific course
 const getStudentsInCourse = async (req, res) => {
   const { courseCode } = req.query;
 
-  console.log('Fetching students for courseCode:', courseCode);  // Log courseCode
+  console.log('Fetching students for courseCode:', courseCode);  
 
   try {
       const [students] = await pool.execute(
@@ -114,7 +112,7 @@ const updateMarks = async (req, res) => {
          ON DUPLICATE KEY UPDATE marks_out_of_25 = ?`,
         [studentId, courseCode, mid_term_mark, mid_term_mark]
       );
-  
+      
       await connection.commit();
       res.json({ message: 'Marks updated successfully' });
     } catch (error) {

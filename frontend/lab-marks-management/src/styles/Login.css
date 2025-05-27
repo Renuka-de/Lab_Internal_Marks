@@ -1,0 +1,163 @@
+/* Main Auth Container */
+.lms-auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
+}
+
+/* Auth Card */
+.lms-auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Header Section */
+.lms-auth-header {
+  padding: 30px;
+  text-align: center;
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+  color: white;
+}
+
+.lms-auth-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.lms-auth-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+/* Form Styles */
+.lms-auth-form {
+  padding: 30px;
+}
+
+.lms-form-group {
+  margin-bottom: 20px;
+}
+
+.lms-form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.lms-form-control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s;
+  background-color: #f8f9fa;
+}
+
+.lms-form-control:focus {
+  outline: none;
+  border-color: #4b6cb7;
+  box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.2);
+}
+
+/* Buttons */
+.lms-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.lms-primary-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.lms-primary-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.lms-primary-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.lms-secondary-btn {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: #4b6cb7;
+  border: 1px solid #4b6cb7;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.lms-secondary-btn:hover {
+  background: #f8f9fa;
+}
+
+/* Error Message */
+.lms-form-error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  padding: 10px;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 6px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+/* Footer */
+.lms-auth-footer {
+  padding: 15px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6c757d;
+  border-top: 1px solid #e9ecef;
+}
+
+.lms-auth-contact {
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .lms-auth-card {
+    border-radius: 0;
+  }
+  
+  .lms-auth-container {
+    padding: 0;
+  }
+  
+  .lms-auth-header {
+    padding: 25px 20px;
+  }
+  
+  .lms-auth-form {
+    padding: 25px;
+  }
+}

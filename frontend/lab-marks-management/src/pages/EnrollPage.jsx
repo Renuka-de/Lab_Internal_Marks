@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './EnrollPage.css'
+import { useNavigate } from 'react-router-dom';
+import '../styles/EnrollPage.css';
 
 const EnrollPage = () => {
   const [availableCourses, setAvailableCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const studentId = localStorage.getItem('id');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAvailableCourses = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(`http://localhost:5000/api/student/available-courses?studentId=${studentId}`);
         setAvailableCourses(res.data);
       } catch (err) {
         console.error('Error fetching courses:', err);
+        setError('Failed to load available courses. Please try again later.');
+      } finally {
+        setLoading(false);
       }
     };
     fetchAvailableCourses();
@@ -20,53 +29,77 @@ const EnrollPage = () => {
 
   const handleEnroll = async (courseCode, facultyId) => {
     try {
+      setLoading(true);
+      setError(null);
       await axios.post(`http://localhost:5000/api/student/enroll`, {
         studentId,
         courseCode,
         facultyId,
       });
-      alert("Enrolled successfully!");
+      setSuccess(`Successfully enrolled in ${courseCode}!`);
       setAvailableCourses(prev => prev.filter(c => c.course_code !== courseCode));
     } catch (error) {
-      alert("Enrollment failed.");
       console.error(error);
+      setError(error.response?.data?.message || 'Enrollment failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Available Courses</h2>
-      {availableCourses.length > 0 ? (
-        <table className="min-w-full table-auto border-collapse border">
-          <thead className="bg-gray-200">
-            <tr>
-              <th>Course Code</th>
-              <th>Course Name</th>
-              <th>Faculty</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {availableCourses.map((course, index) => (
-              <tr key={index} className="text-center border-t">
-                <td>{course.course_code}</td>
-                <td>{course.course_name}</td>
-                <td>{course.faculty_name}</td>
-                <td>
-                  <button
-                    onClick={() => handleEnroll(course.course_code, course.faculty_id)}
-                    className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-                  >
-                    Enroll
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No available courses for enrollment.</p>
-      )}
+    <div className="enroll-container">
+      
+      <nav className="enroll-navbar">
+        <button className="nav-back-button" onClick={() => navigate(-1)}>
+          ← Back to Dashboard
+        </button>
+        <div className="nav-title">Course Enrollment</div>
+        <div className="nav-spacer"></div>
+      </nav>
+
+      <div className="enroll-content">
+        <h2 className="enroll-heading">Available Courses</h2>
+        
+       
+        {loading && <div className="loading-indicator">Loading available courses...</div>}
+        {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
+
+        {availableCourses.length > 0 ? (
+          <div className="courses-table-container">
+            <table className="courses-table">
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Course Name</th>
+                  <th>Faculty</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {availableCourses.map((course, index) => (
+                  <tr key={index}>
+                    <td data-label="Course Code">{course.course_code}</td>
+                    <td data-label="Course Name">{course.course_name}</td>
+                    <td data-label="Faculty">{course.faculty_name}</td>
+                    <td data-label="Action">
+                      <button
+                        onClick={() => handleEnroll(course.course_code, course.faculty_id)}
+                        className="enroll-button"
+                        disabled={loading}
+                      >
+                        {loading ? 'Processing...' : 'Enroll'}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          !loading && <div className="no-courses">No available courses for enrollment.</div>
+        )}
+      </div>
     </div>
   );
 };

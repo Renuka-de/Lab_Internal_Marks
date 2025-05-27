@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './FacultyDashboard.css';
+import '../styles/FacultyDashboard.css';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const FacultyDashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -9,13 +10,13 @@ const FacultyDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [facultyDetails, setFacultyDetails] = useState(null); // To store faculty's personal details
-  const [showInfoModal, setShowInfoModal] = useState(false); // To toggle modal visibility
+  const [facultyDetails, setFacultyDetails] = useState(null); 
+  const [showInfoModal, setShowInfoModal] = useState(false); 
 
   const facultyId = localStorage.getItem('id');
-  const adminId = localStorage.getItem('adminId') || 1; // Default admin ID
+  const adminId = localStorage.getItem('adminId') || 1; 
 
-  // Fetch faculty details
+  
   useEffect(() => {
     const fetchFacultyDetails = async () => {
       try {
@@ -29,7 +30,7 @@ const FacultyDashboard = () => {
     fetchFacultyDetails();
   }, [facultyId]);
 
-  // Fetch courses handled by faculty
+  
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -56,7 +57,7 @@ const FacultyDashboard = () => {
       
       const res = await axios.get(`http://localhost:5000/api/faculty/course-students?courseCode=${course.course_code}`);
       
-      // Transform data to match expected format
+      
       const transformedStudents = res.data.map(student => ({
         student_id: student.student_id,
         student_name: student.student_name,
@@ -130,22 +131,29 @@ const FacultyDashboard = () => {
     setShowInfoModal(!showInfoModal);
   };
 
+  const navigate=useNavigate();
+
   return (
     <div className="faculty-dashboard">
-      <h2>Faculty Dashboard</h2>
+      <nav className="faculty-navbar">
+  <button className="navbar-back" onClick={() => navigate('/')}>
+    ← Back to Home
+  </button>
+  <div className="navbar-title">Faculty Dashboard</div>
+  <button className="navbar-info" onClick={toggleInfoModal}>
+    Faculty Info
+  </button>
+</nav>
 
-      {/* Info Button */}
-      <button className="info-button" onClick={toggleInfoModal}>
-        Info
-      </button>
-
-      {/* Info Modal */}
+     
       {showInfoModal && facultyDetails && (
         <div className="info-modal">
           <div className="modal-content">
             <h3>Faculty Details</h3>
             <p><strong>Name:</strong> {facultyDetails.faculty_name}</p>
-            <p><strong>Date of Birth:</strong> {facultyDetails.dob}</p>
+            <p><strong>Date of Birth:</strong> {new Date(facultyDetails.dob).toLocaleDateString(
+              'en-GB', { day: '2-digit', month: 'long',  year: 'numeric'})}</p>
+
             <p><strong>Gender:</strong> {facultyDetails.gender}</p>
             <p><strong>Phone Number:</strong> {facultyDetails.f_phone_no}</p>
             <p><strong>Address:</strong> {facultyDetails.house_name}, {facultyDetails.place}, {facultyDetails.city}</p>
@@ -154,12 +162,12 @@ const FacultyDashboard = () => {
         </div>
       )}
 
-      {/* Status Messages */}
+      
       {error && <div className="error-message">{error}</div>}
       {success && <div className="success-message">{success}</div>}
       {loading && <div className="loading-overlay">Loading...</div>}
 
-      {/* Course Selection */}
+     
       <div className="course-selection">
         <h3>Your Courses</h3>
         {courses.length > 0 ? (
@@ -180,7 +188,7 @@ const FacultyDashboard = () => {
         )}
       </div>
 
-      {/* Student Marks Table */}
+     
       {selectedCourse && (
         <div className="marks-table-container">
           <h3>Students in {selectedCourse.course_name}</h3>
@@ -204,7 +212,7 @@ const FacultyDashboard = () => {
                     <td>{student.student_id}</td>
                     <td>{student.student_name}</td>
                     
-                    {/* Lab Inputs */}
+                   
                     {[1, 2, 3, 4].map(labNo => (
                       <td key={labNo}>
                         <input
@@ -218,7 +226,7 @@ const FacultyDashboard = () => {
                       </td>
                     ))}
                     
-                    {/* Mid Term Input */}
+                   
                     <td>
                       <input
                         type="number"
@@ -230,7 +238,7 @@ const FacultyDashboard = () => {
                       />
                     </td>
                     
-                    {/* Save Button */}
+                  
                     <td>
                       <button
                         onClick={() => handleSaveMarks(student)}

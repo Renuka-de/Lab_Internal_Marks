@@ -1,0 +1,239 @@
+/* RegisterForm.css */
+
+/* Main Auth Container - Consistent with Login */
+.lms-auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
+}
+
+/* Auth Card - Matching Login Style */
+.lms-auth-card {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+/* Header Section - Gradient Background */
+.lms-auth-header {
+  padding: 32px;
+  text-align: center;
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+  color: white;
+}
+
+.lms-auth-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.lms-auth-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Form Styles - Consistent with Login */
+.lms-auth-form {
+  padding: 32px;
+}
+
+.lms-form-group {
+  margin-bottom: 24px;
+}
+
+.lms-form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.lms-form-control {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s;
+  background-color: #f8f9fa;
+}
+
+.lms-form-control:focus {
+  outline: none;
+  border-color: #4b6cb7;
+  box-shadow: 0 0 0 3px rgba(75, 108, 183, 0.2);
+  background-color: white;
+}
+
+/* Select Input Styling */
+.lms-form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 1em;
+}
+
+/* Role Selection Highlight */
+.role-selection {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.role-option {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.role-option.active {
+  border-color: #4b6cb7;
+  background-color: rgba(75, 108, 183, 0.1);
+}
+
+/* Buttons - Matching Login */
+.lms-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.lms-primary-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.lms-primary-btn:hover {
+  opacity: 0.95;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(75, 108, 183, 0.3);
+}
+
+.lms-secondary-btn {
+  width: 100%;
+  padding: 14px;
+  background: white;
+  color: #4b6cb7;
+  border: 2px solid #4b6cb7;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.lms-secondary-btn:hover {
+  background: #f8f9fa;
+}
+
+/* Go Back Button */
+.go-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Error Message */
+.lms-form-error {
+  color: #dc3545;
+  font-size: 0.9rem;
+  padding: 12px;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Success Message */
+.lms-form-success {
+  color: #28a745;
+  font-size: 0.9rem;
+  padding: 12px;
+  background-color: rgba(40, 167, 69, 0.1);
+  border-radius: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Footer - Matching Login */
+.lms-auth-footer {
+  padding: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+  border-top: 1px solid #e9ecef;
+}
+
+.lms-auth-link {
+  color: #4b6cb7;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.lms-auth-link:hover {
+  color: #3a56b0;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .lms-auth-card {
+    border-radius: 0;
+  }
+  
+  .lms-auth-container {
+    padding: 0;
+  }
+  
+  .lms-auth-header {
+    padding: 24px 16px;
+  }
+  
+  .lms-auth-form {
+    padding: 24px;
+  }
+  
+  .role-selection {
+    flex-direction: column;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lms-auth-form {
+  animation: fadeIn 0.4s ease-out;
+}

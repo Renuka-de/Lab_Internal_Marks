@@ -9,6 +9,7 @@ router.get('/report', studentController.getStudentReport);
 router.get('/available-courses', studentController.getAvailableCourses);
 router.post('/enroll', studentController.enrollInCourse);
 router.get('/performance-detail', studentController.getStudentPerformanceDetail);
+router.delete('/unenroll', studentController.unenrollCourse);
 
 
 module.exports = router;

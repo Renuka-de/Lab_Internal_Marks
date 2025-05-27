@@ -2,7 +2,6 @@
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
 
-// Register a new user
 exports.register = async (req, res) => {
   const { role, ...data } = req.body;
 
@@ -17,34 +16,43 @@ exports.register = async (req, res) => {
   let columns = [];
   let values = [];
 
-  if (role === 'admin') {
-    tableName = 'admin';
-    columns = ['admin_id', 'username', 'email', 'password'];
-    values = [data.admin_id, data.username, data.email, data.password];
-  } else if (role === 'faculty') {
-    tableName = 'faculty';
-    columns = ['faculty_id', 'faculty_name', 'dob', 'gender', 'house_name', 'place', 'city', 'f_phone_no', 'admin_id', 'department_id'];
-    values = [
-      data.faculty_id, data.faculty_name, data.dob, data.gender, data.house_name, data.place,
-      data.city, data.f_phone_no, data.admin_id, data.department_id
-    ];
-  } else if (role === 'student') {
-    tableName = 'student';
-    columns = ['student_id', 'student_name', 'dob', 'gender', 'house_name', 'place', 'city', 's_phone_no', 'admin_id', 'department_id'];
-    values = [
-      data.student_id, data.student_name, data.dob, data.gender, data.house_name, data.place,
-      data.city, data.s_phone_no, data.admin_id, data.department_id
-    ];
-  } else {
-    console.log('🔴 Invalid role');
-    return res.status(400).json({ error: 'Invalid role' });
-  }
-
-  const query = `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${columns.map(() => '?').join(', ')})`;
-  console.log('🟡 SQL Query:', query);
-  console.log('🟢 Values:', values);
-
   try {
+    
+    const [deptRows] = await pool.execute(
+      'SELECT department_id FROM department WHERE department_name = ?',
+      [data.department_name]
+    );
+
+    if (deptRows.length === 0) {
+      return res.status(400).json({ error: 'Invalid department name' });
+    }
+
+    const department_id = deptRows[0].department_id;
+
+    if (role === 'faculty') {
+      tableName = 'faculty';
+      columns = ['faculty_name', 'dob', 'gender', 'house_name', 'place', 'city', 'f_phone_no', 'department_id'];
+      values = [
+        data.faculty_name, data.dob, data.gender, data.house_name, data.place,
+        data.city, data.f_phone_no, department_id
+      ];
+    } else if (role === 'student') {
+      tableName = 'student';
+      columns = ['student_name', 'dob', 'gender', 'house_name', 'place', 'city', 's_phone_no', 'department_id'];
+      values = [
+        data.student_name, data.dob, data.gender, data.house_name, data.place,
+        data.city, data.s_phone_no, department_id
+      ];
+    } else {
+      console.log('🔴 Invalid role');
+      return res.status(400).json({ error: 'Invalid role' });
+    }
+
+    // Insert query
+    const query = `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${columns.map(() => '?').join(', ')})`;
+    console.log('🟡 SQL Query:', query);
+    console.log('🟢 Values:', values);
+
     const [result] = await pool.execute(query, values);
     console.log('✅ Insert Result:', result);
 
@@ -55,11 +63,12 @@ exports.register = async (req, res) => {
   } catch (err) {
     console.error('❌ Registration Error:', err);
     return res.status(500).json({
-      error: `${role.charAt(0).toUpperCase() + role.slice(1)} registration failed`,
+      error: 'Registration failed',
       details: err
     });
   }
 };
+
 
 // Login user
 exports.login = async (req, res) => {
@@ -111,3 +120,15 @@ exports.login = async (req, res) => {
     return res.status(500).json({ error: 'Database error' });
   }
 };
+
+exports.getDepartments = async (req, res) => {
+  try {
+    const [departments] = await pool.execute('SELECT department_id, department_name FROM department');
+res.json(departments);
+
+  } catch (error) {
+    console.error('❌ Failed to fetch departments:', error);
+    res.status(500).json({ error: 'Failed to fetch departments' });
+  }
+};
+

@@ -1,0 +1,136 @@
+/* LMS Login Form Styles */
+.lms-login-form {
+  width: 100%;
+  padding: 0 32px;
+}
+
+.lms-login-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.lms-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lms-form-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.lms-form-input,
+.lms-form-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f9fafb;
+}
+
+.lms-form-input:focus,
+.lms-form-select:focus {
+  outline: none;
+  border-color: #3a7bd5;
+  box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.1);
+}
+
+.lms-form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 1em;
+}
+
+.lms-form-error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 6px;
+  margin-top: -0.5rem;
+}
+
+.lms-form-submit {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+}
+
+.lms-form-submit:hover {
+  background: linear-gradient(135deg, #2c65c4 0%, #00b7e6 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(58, 123, 213, 0.2);
+}
+
+.lms-form-submit:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.lms-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: lms-spin 1s ease-in-out infinite;
+}
+
+@keyframes lms-spin {
+  to { transform: rotate(360deg); }
+}
+
+.lms-form-footer {
+  text-align: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.lms-form-footer-text {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.lms-form-footer-button {
+  background: none;
+  border: none;
+  color: #3a7bd5;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.lms-form-footer-button:hover {
+  background-color: rgba(58, 123, 213, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .lms-login-form {
+    padding: 0 20px;
+  }
+}

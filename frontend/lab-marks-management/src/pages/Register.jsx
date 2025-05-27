@@ -1,6 +1,6 @@
 import React from 'react';
 import RegisterForm from '../components/RegisterForm';
-import './Register.css'; // Import custom styles
+import '../styles/Register.css'; // Import custom styles
 
 const Register = () => {
   return (

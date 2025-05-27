@@ -1,95 +1,98 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './LoginForm.css'; // Import custom styles
+import '../styles/Login.css';
 
 const LoginForm = () => {
   const [role, setRole] = useState('');
   const [id, setId] = useState('');
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+    setIsLoading(true);
+    
     if (!role || !id) {
-      setError('Please fill in both role and ID');
+      setError('Please fill in all fields');
+      setIsLoading(false);
       return;
     }
-  
+
     try {
-      const res = await axios.post(`http://localhost:5000/api/auth/login`, {
-        id,
-        role
-      });
-  
+      const res = await axios.post('http://localhost:5000/api/auth/login', { id, role });
+      
       if (res.data.message === 'Login successful') {
         localStorage.setItem('role', res.data.role);
         localStorage.setItem('id', res.data.userId);
-  
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+
         if (role === 'student') navigate('/student/dashboard');
         else if (role === 'faculty') navigate('/faculty/dashboard');
         else if (role === 'admin') navigate('/admin/dashboard');
-      } else {
-        setError('Invalid credentials');
       }
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        alert('User not found! Redirecting to register page...');
-        navigate('/register');
+      if (error.response?.status === 401) {
+        setError('Invalid credentials');
       } else {
+        setError('Login failed. Please try again.');
         console.error('Login error:', error);
-        setError('Something went wrong, please try again.');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="login-form-container">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin} className="space-y-4">
-        <div>
-          <label className="block mb-1">Role:</label>
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-          >
-            <option value="">Select Role</option>
-            <option value="student">Student</option>
-            <option value="faculty">Faculty</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-        <div>
-          <label className="block mb-1">ID:</label>
-          <input
-            type="text"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-            placeholder="Enter your ID"
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
+    <form onSubmit={handleLogin} className="lms-auth-form">
+      <div className="lms-form-group">
+        <label className="lms-form-label">Role</label>
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="lms-form-control"
+          required
+        >
+          <option value="">Select Role</option>
+          <option value="student">Student</option>
+          <option value="faculty">Faculty</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <div className="lms-form-group">
+        <label className="lms-form-label">ID Number</label>
+        <input
+          type="text"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+          className="lms-form-control"
+          placeholder="Enter your ID"
+          required
+        />
+      </div>
+
+      {error && <div className="lms-form-error">{error}</div>}
+
+      <div className="lms-form-actions">
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+          className="lms-primary-btn"
+          disabled={isLoading}
         >
-          Login
+          {isLoading ? 'Logging in...' : 'Login'}
         </button>
-        {error && <p className="error-message">{error}</p>}
-      </form>
 
-      <div className="footer-container">
-        <p className="text-sm">Don’t have an account?</p>
         <button
+          type="button"
           onClick={() => navigate('/register')}
-          className="mt-2 bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+          className="lms-secondary-btn"
         >
           Register
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 
