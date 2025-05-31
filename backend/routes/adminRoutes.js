@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
 
-
+router.get('/departments', adminController.getDepartments);
 router.post('/departments', adminController.addDepartment);
 router.delete('/departments/:id', adminController.deleteDepartment);
 
