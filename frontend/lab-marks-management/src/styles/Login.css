@@ -116,7 +116,9 @@
 }
 
 .lms-secondary-btn:hover {
-  background: #f8f9fa;
+   color: #4b6cb7;
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 /* Error Message */
