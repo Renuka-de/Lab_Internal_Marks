@@ -203,6 +203,7 @@
 
 .lms-auth-link:hover {
   color: #3a56b0;
+  cursor: pointer;
 }
 
 /* Responsive Design */
