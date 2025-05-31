@@ -47,7 +47,8 @@ const StudentDashboard = () => {
           <div className="info-panel">
             <h4>Student Personal Information</h4>
             <p><strong>Name:</strong> {studentDetails.student_name}</p>
-            <p><strong>DOB:</strong> {studentDetails.dob}</p>
+            <p><strong>Date of Birth:</strong> {new Date(studentDetails.dob).toLocaleDateString(
+              'en-GB', { day: '2-digit', month: 'long',  year: 'numeric'})}</p>
             <p><strong>Gender:</strong> {studentDetails.gender}</p>
             <p><strong>Phone:</strong> {studentDetails.s_phone_no}</p>
             <p><strong>Address:</strong> {studentDetails.house_name}, {studentDetails.place}, {studentDetails.city}</p>
